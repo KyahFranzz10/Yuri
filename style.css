@@ -61,7 +61,6 @@ body {
     pointer-events: none;
     transition: opacity 1s ease-in-out;
     padding: 20px;
-    overflow-x: hidden;
 }
 
 .view.active {

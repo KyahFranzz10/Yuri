@@ -90,6 +90,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event Delegation for dynamically loaded buttons
     document.body.addEventListener('click', (e) => {
+        // Balloon popping interaction
+        const balloon = e.target.closest('.balloon');
+        if (balloon) {
+            balloon.style.opacity = '0';
+            balloon.style.pointerEvents = 'none';
+            
+            const popText = document.createElement('div');
+            popText.innerText = '💥';
+            popText.style.position = 'fixed';
+            popText.style.left = e.clientX + 'px';
+            popText.style.top = e.clientY + 'px';
+            popText.style.transform = 'translate(-50%, -50%) scale(0.5)';
+            popText.style.fontSize = '40px';
+            popText.style.zIndex = '1000';
+            popText.style.transition = 'all 0.2s ease-out';
+            popText.style.pointerEvents = 'none';
+            document.body.appendChild(popText);
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    popText.style.transform = 'translate(-50%, -150%) scale(1.5)';
+                    popText.style.opacity = '0';
+                });
+            });
+
+            setTimeout(() => {
+                popText.remove();
+            }, 300);
+            return;
+        }
+
         // 1. Initial -> Transition -> Grid View
         const surpriseBtn = e.target.closest('#surprise-btn');
         if (surpriseBtn) {
