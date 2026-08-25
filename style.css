@@ -473,6 +473,26 @@ body {
     object-fit: cover;
 }
 
+/* --- Roving Cat --- */
+.roving-cat {
+    position: absolute;
+    bottom: 20px;
+    left: -100px;
+    font-size: 3rem;
+    z-index: 5; /* behind views but above background collage */
+    animation: roveCat 18s linear infinite;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+}
+
+@keyframes roveCat {
+    0% { transform: translateX(-100px) scaleX(1); }
+    49% { transform: translateX(calc(100vw + 100px)) scaleX(1); }
+    50% { transform: translateX(calc(100vw + 100px)) scaleX(-1); }
+    99% { transform: translateX(-100px) scaleX(-1); }
+    100% { transform: translateX(-100px) scaleX(1); }
+}
+
 /* --- Birthday Decorations --- */
 
 /* Bunting / Banderitas */
