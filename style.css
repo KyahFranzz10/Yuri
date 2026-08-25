@@ -488,21 +488,24 @@ body {
     height: 70px;
     width: auto;
     display: block;
-    filter: sepia(1) saturate(8) hue-rotate(345deg) brightness(1.15) contrast(1.1); /* Vibrant Orange / Ginger Cat 🐱 */
+    /* Invert black to white, then colorize into vibrant Garfield Orange / Ginger */
+    filter: invert(1) sepia(1) saturate(14) hue-rotate(345deg) brightness(0.95) contrast(1.2) drop-shadow(0 3px 6px rgba(0,0,0,0.4));
 }
 
 .roving-cat.cat-2 img {
     height: 52px;
     width: auto;
     display: block;
-    filter: brightness(0.2) contrast(2.2) drop-shadow(0 0 6px rgba(255, 255, 255, 0.4)); /* Midnight Black Cat 🐈‍⬛ */
+    /* Invert black to crisp Snow White */
+    filter: invert(1) brightness(1.2) contrast(1.1) drop-shadow(0 3px 8px rgba(0,0,0,0.6));
 }
 
 .roving-cat.cat-3 img {
     height: 62px;
     width: auto;
     display: block;
-    filter: sepia(0.9) hue-rotate(280deg) saturate(5) brightness(1.2) drop-shadow(0 0 8px rgba(241, 91, 181, 0.5)); /* Cute Pink / Lilac Cat 🌸 */
+    /* Invert black, then tint to Cute Pastel Pink / Rose Gold */
+    filter: invert(1) sepia(1) saturate(8) hue-rotate(290deg) brightness(1.05) contrast(1.1) drop-shadow(0 3px 8px rgba(0,0,0,0.4));
 }
 
 /* --- Birthday Decorations --- */
