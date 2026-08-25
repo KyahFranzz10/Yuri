@@ -1,18 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Elements
-    const surpriseBtn = document.getElementById('surprise-btn');
-    const toCakeBtn = document.getElementById('to-cake-btn');
-    const fallbackBlowBtn = document.getElementById('fallback-blow-btn');
-    
-    // Views
-    const initialView = document.getElementById('initial-view');
-    const slideshowView = document.getElementById('slideshow-view');
-    const slideshowView2 = document.getElementById('slideshow-view-2');
-    const cakeView = document.getElementById('cake-view');
-    const mainView = document.getElementById('main-view');
-    const finalView = document.getElementById('final-view');
-    
     const bgMusic = document.getElementById('bg-music');
+    const ttuVideo = document.getElementById('ttu-video');
+    const ttuCanvas = document.getElementById('ttu-canvas');
+    const ctx = ttuCanvas.getContext('2d', { willReadFrequently: true });
+    
+    const offCanvas = document.createElement('canvas');
+    const offCtx = offCanvas.getContext('2d', { willReadFrequently: true });
+    let animationFrameId;
+    
     let audioContext;
     let micStream;
     let hbdAudioCtx; // For the Web Audio API melody
@@ -53,39 +48,151 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // View Switching Logic
-    function switchView(hideView, showView, callback = null) {
-        hideView.classList.remove('active');
-        setTimeout(() => {
-            showView.classList.add('active');
-            if(callback) callback();
-        }, 800); // Wait for transition
+    // Dynamic Loading Logic
+    async function loadView(url, onLoaded = null) {
+        try {
+            const response = await fetch(url);
+            const html = await response.text();
+            
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            const newView = temp.firstElementChild;
+            
+            const container = document.getElementById('app-container');
+            const currentView = container.querySelector('.view.active');
+            
+            container.appendChild(newView);
+            
+            // Randomize background
+            generateCollage('global-bg-collage');
+            
+            if (currentView) {
+                currentView.classList.remove('active');
+                setTimeout(() => {
+                    newView.classList.add('active');
+                    if(onLoaded) onLoaded();
+                    setTimeout(() => {
+                        currentView.remove();
+                    }, 1000); // Wait for transition before removing
+                }, 800);
+            } else {
+                // First load
+                setTimeout(() => {
+                    newView.classList.add('active');
+                    if(onLoaded) onLoaded();
+                }, 50);
+            }
+            
+        } catch (err) {
+            console.error("Failed to load view:", err);
+        }
     }
 
-    // 1. Initial -> Grid View (formerly Slideshow)
-    surpriseBtn.addEventListener('click', () => {
-        bgMusic.volume = 0.4;
-        bgMusic.play().catch(e => console.log("Bg audio not found or blocked."));
-        switchView(initialView, slideshowView);
-    });
-    
-    // 1.5 Grid 1 -> Grid 2 (Singing)
-    const toMemories2Btn = document.getElementById('to-memories-2-btn');
-    if(toMemories2Btn) {
-        toMemories2Btn.addEventListener('click', () => {
-            switchView(slideshowView, slideshowView2);
-        });
-    }
-
-    // 2. Grid 2 -> Cake
-    toCakeBtn.addEventListener('click', () => {
-        // Pause singing videos if playing
-        document.querySelectorAll('.video-grid video').forEach(v => v.pause());
+    // Event Delegation for dynamically loaded buttons
+    document.body.addEventListener('click', (e) => {
+        // 1. Initial -> Transition -> Grid View
+        const surpriseBtn = e.target.closest('#surprise-btn');
+        if (surpriseBtn) {
+            bgMusic.volume = 0.4;
+            bgMusic.play().catch(err => console.log("Bg audio not found or blocked."));
+            
+            loadView('views/transition.html', () => {
+                playTransitionEffect(() => {
+                    loadView('views/memories1.html');
+                });
+            });
+            return;
+        }
         
-        bgMusic.pause();
-        playHappyBirthday();
-        switchView(slideshowView2, cakeView, setupMicrophone);
+        // 1.5 Grid 1 -> Grid 2 (Singing)
+        const toMem2Btn = e.target.closest('#to-memories-2-btn');
+        if (toMem2Btn) {
+            loadView('views/memories2.html');
+            return;
+        }
+
+        // 2. Grid 2 -> Cake
+        const toCakeBtn = e.target.closest('#to-cake-btn');
+        if (toCakeBtn) {
+            // Pause singing videos if playing
+            document.querySelectorAll('.video-grid video').forEach(v => v.pause());
+            
+            bgMusic.pause();
+            playHappyBirthday();
+            loadView('views/cake.html', setupMicrophone);
+            return;
+        }
+
+        // Fallback blow button
+        const fallbackBlowBtn = e.target.closest('#fallback-blow-btn');
+        if (fallbackBlowBtn) {
+            blowOutCandle();
+            return;
+        }
     });
+
+    function playTransitionEffect(callback) {
+        const flashImg = document.getElementById('flash-img');
+        const bgCollage = document.getElementById('global-bg-collage');
+        const emojiContainer = document.getElementById('emoji-container');
+        
+        if(!flashImg) return callback();
+
+        flashImg.style.display = 'block';
+        
+        const images = [
+            "IMG_20240406_212807_497.jpg",
+            "IMG_20240409_113926_816.jpg",
+            "IMG_20240410_003913_034.jpg",
+            "1714983792741.jpg",
+            "pic with me/20240404193551512.jpg"
+        ];
+        
+        let flashCount = 0;
+        const flashInterval = setInterval(() => {
+            flashImg.src = `assets/image/${images[flashCount % images.length]}`;
+            flashImg.style.opacity = 1;
+            flashImg.style.transform = `translate(-50%, -50%) scale(${0.8 + (flashCount * 0.05)})`;
+            
+            setTimeout(() => {
+                if(flashCount <= 10) flashImg.style.opacity = 0;
+            }, 100);
+            
+            flashCount++;
+            if (flashCount > 10) {
+                clearInterval(flashInterval);
+                
+                flashImg.style.display = 'none';
+                
+                // Show background collage
+                bgCollage.style.opacity = 0.25;
+                bgCollage.style.transform = 'scale(1)';
+                
+                // Spawn emojis
+                spawnEmojis(emojiContainer);
+                
+                setTimeout(() => {
+                    callback();
+                }, 4000);
+            }
+        }, 150);
+    }
+    
+    function spawnEmojis(container) {
+        if(!container) return;
+        const emojis = ['🐱', '🦁', '🍒', '✨', '💖', '🎁'];
+        for (let i = 0; i < 40; i++) {
+            setTimeout(() => {
+                const el = document.createElement('div');
+                el.className = 'floating-emoji';
+                el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                el.style.left = `${Math.random() * 90}%`;
+                el.style.animationDuration = `${2 + Math.random() * 2}s`;
+                el.style.fontSize = `${2 + Math.random() * 3}rem`;
+                container.appendChild(el);
+            }, i * 100);
+        }
+    }
 
     // 3. Cake -> Main Reveal
     function blowOutCandle() {
@@ -103,19 +210,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         setTimeout(() => {
-            switchView(cakeView, mainView, () => {
-                mainView.classList.add('show-main');
+            loadView('views/message.html', () => {
+                const mainView = document.getElementById('main-view');
+                if(mainView) mainView.classList.add('show-main');
                 fireConfetti();
                 // Attempt to autoplay the greeting video
                 const greetingVideo = document.getElementById('greeting-video');
                 if (greetingVideo) {
                     greetingVideo.play().catch(e => console.log("Video autoplay blocked, user must press play."));
+                    
+                    greetingVideo.addEventListener('ended', () => {
+                        ttuVideo.currentTime = 0;
+                        ttuVideo.play().catch(e => console.log("Video play failed:", e));
+                        ttuCanvas.style.display = 'block';
+                        
+                        // Match canvas size to window
+                        ttuCanvas.width = window.innerWidth;
+                        ttuCanvas.height = window.innerHeight;
+                        
+                        processFrame();
+                    });
                 }
             });
         }, 1500); // 1.5s delay after blowing candle
     }
-
-    fallbackBlowBtn.addEventListener('click', blowOutCandle);
 
     // Microphone Logic for blowing candle
     async function setupMicrophone() {
@@ -155,8 +273,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
-
     // Confetti logic
     function fireConfetti() {
         const duration = 5 * 1000;
@@ -185,15 +301,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }));
         }, 250);
     }
-    
-    // TTU Gift Green Screen Logic
-    const ttuVideo = document.getElementById('ttu-video');
-    const ttuCanvas = document.getElementById('ttu-canvas');
-    const ctx = ttuCanvas.getContext('2d', { willReadFrequently: true });
-    
-    const offCanvas = document.createElement('canvas');
-    const offCtx = offCanvas.getContext('2d', { willReadFrequently: true });
-    let animationFrameId;
     
     // Generate Random Collages
     function generateCollage(containerId) {
@@ -231,25 +338,8 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = html;
     }
 
-    generateCollage('bg-collage');
-    generateCollage('bg-collage-cake');
-    generateCollage('bg-collage-final');
-
-    // Auto-play TTU when greeting video finishes
-    const greetingVideo = document.getElementById('greeting-video');
-    if (greetingVideo) {
-        greetingVideo.addEventListener('ended', () => {
-            ttuVideo.currentTime = 0;
-            ttuVideo.play().catch(e => console.log("Video play failed:", e));
-            ttuCanvas.style.display = 'block';
-            
-            // Match canvas size to window
-            ttuCanvas.width = window.innerWidth;
-            ttuCanvas.height = window.innerHeight;
-            
-            processFrame();
-        });
-    }
+    // Initial background generation (starts hidden)
+    generateCollage('global-bg-collage');
 
     ttuVideo.addEventListener('ended', () => {
         cancelAnimationFrame(animationFrameId);
@@ -257,8 +347,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.clearRect(0, 0, ttuCanvas.width, ttuCanvas.height);
         
         // Transition to Final View
-        switchView(mainView, finalView, () => {
-            finalView.classList.add('show-main');
+        loadView('views/final.html', () => {
+            const finalView = document.getElementById('final-view');
+            if(finalView) finalView.classList.add('show-main');
             fireConfetti(); // Celebrate again!
         });
     });
@@ -313,4 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         animationFrameId = requestAnimationFrame(processFrame);
     }
+    
+    // Finally, load the initial view!
+    loadView('views/initial.html');
 });

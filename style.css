@@ -63,6 +63,7 @@ body {
 /* General Buttons */
 .action-btn, .gift-btn {
     position: relative;
+    z-index: 10;
     background: linear-gradient(45deg, var(--primary-purple), var(--accent));
     border: none;
     padding: 15px 30px;
@@ -130,6 +131,8 @@ body {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
     width: 90%;
+    position: relative;
+    z-index: 10;
     max-width: 500px;
     max-height: 70vh;
     overflow-y: auto;
@@ -155,6 +158,8 @@ body {
     flex-direction: column;
     gap: 15px;
     width: 90%;
+    position: relative;
+    z-index: 10;
     max-width: 500px;
     max-height: 70vh;
     overflow-y: auto;
@@ -187,7 +192,7 @@ body {
 
 /* Cake View */
 #cake-view {
-    background: var(--bg-dark);
+    /* Transparent to show global background */
 }
 
 .instruction-text {
@@ -195,6 +200,8 @@ body {
     margin-bottom: 50px;
     text-align: center;
     font-weight: normal;
+    position: relative;
+    z-index: 10;
 }
 
 .cake-container {
@@ -341,7 +348,7 @@ body {
 
 /* Main View & Final View */
 #main-view, #final-view {
-    background: var(--bg-dark);
+    /* Transparent to show global background */
 }
 
 .bg-collage {
@@ -427,4 +434,129 @@ body {
         transform: translateY(0);
         opacity: 1;
     }
+}
+
+.floating-emoji {
+    position: absolute;
+    font-size: 3rem;
+    animation: floatUpEmoji 3s ease-in-out forwards;
+    opacity: 0;
+}
+
+@keyframes floatUpEmoji {
+    0% { transform: translateY(110vh) scale(0.5); opacity: 1; }
+    50% { transform: translateY(50vh) scale(1.5); opacity: 1; }
+    100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+}
+
+.flash-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    max-width: 80%;
+    max-height: 80%;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 0.1s, transform 0.15s;
+    z-index: 10;
+    object-fit: cover;
+}
+
+/* --- Birthday Decorations --- */
+
+/* Bunting / Banderitas */
+.bunting {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    z-index: 5;
+}
+
+.bunting li {
+    position: relative;
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 40px solid var(--accent); /* Default pink */
+    animation: swing 2s ease-in-out infinite alternate;
+    transform-origin: top center;
+}
+
+.bunting li:nth-child(even) {
+    border-top-color: var(--primary-purple);
+    animation-delay: 0.5s;
+}
+
+.bunting li:nth-child(3n) {
+    border-top-color: #00f5d4;
+    animation-delay: 1s;
+}
+
+.bunting li:nth-child(4n) {
+    border-top-color: #fee440;
+    animation-delay: 0.2s;
+}
+
+@keyframes swing {
+    0% { transform: rotate(5deg); }
+    100% { transform: rotate(-5deg); }
+}
+
+/* Balloons */
+.balloon {
+    position: absolute;
+    bottom: -100px;
+    width: 60px;
+    height: 75px;
+    background-color: var(--accent);
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+    box-shadow: inset -10px -10px 15px rgba(0,0,0,0.2);
+    animation: floatBalloon 15s linear infinite;
+    z-index: 2;
+    opacity: 0.8;
+}
+
+.balloon::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 8px solid currentColor;
+}
+
+/* Balloon Strings */
+.balloon::before {
+    content: '';
+    position: absolute;
+    bottom: -58px;
+    left: 50%;
+    width: 2px;
+    height: 50px;
+    background-color: rgba(255,255,255,0.4);
+}
+
+.balloon.b1 { left: 10%; background-color: #ff3366; color: #ff3366; animation-duration: 12s; }
+.balloon.b2 { left: 30%; background-color: #9b5de5; color: #9b5de5; animation-duration: 16s; animation-delay: 2s; }
+.balloon.b3 { left: 55%; background-color: #00f5d4; color: #00f5d4; animation-duration: 14s; animation-delay: 5s; }
+.balloon.b4 { left: 75%; background-color: #fee440; color: #fee440; animation-duration: 18s; animation-delay: 1s; }
+.balloon.b5 { left: 90%; background-color: #f15bb5; color: #f15bb5; animation-duration: 13s; animation-delay: 4s; }
+
+@keyframes floatBalloon {
+    0% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-60vh) rotate(5deg); }
+    100% { transform: translateY(-120vh) rotate(-5deg); }
 }
