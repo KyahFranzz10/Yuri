@@ -436,45 +436,48 @@ document.addEventListener('DOMContentLoaded', () => {
         animationFrameId = requestAnimationFrame(processFrame);
     }
     
-    // Dynamic Full-Screen Roving Cat
+    // Dynamic Full-Screen Roving Cats
     function initRovingCat() {
-        const cat = document.querySelector('.roving-cat');
-        if (!cat) return;
+        const cats = document.querySelectorAll('.roving-cat');
+        if (!cats || cats.length === 0) return;
 
-        const pad = 60;
-        let currentX = Math.random() * Math.max(100, window.innerWidth - pad * 2) + pad;
-        let currentY = Math.random() * Math.max(100, window.innerHeight - pad * 2) + pad;
-        cat.style.transform = `translate(${currentX}px, ${currentY}px)`;
+        cats.forEach((cat, index) => {
+            const pad = 60;
+            let currentX = Math.random() * Math.max(100, window.innerWidth - pad * 2) + pad;
+            let currentY = Math.random() * Math.max(100, window.innerHeight - pad * 2) + pad;
+            cat.style.transform = `translate(${currentX}px, ${currentY}px)`;
 
-        function roam() {
-            const maxX = Math.max(100, window.innerWidth - pad * 2);
-            const maxY = Math.max(100, window.innerHeight - pad * 2);
-            
-            const targetX = Math.random() * maxX + pad * 0.5;
-            const targetY = Math.random() * maxY + pad * 0.5;
+            function roam() {
+                const maxX = Math.max(100, window.innerWidth - pad * 2);
+                const maxY = Math.max(100, window.innerHeight - pad * 2);
+                
+                const targetX = Math.random() * maxX + pad * 0.5;
+                const targetY = Math.random() * maxY + pad * 0.5;
 
-            const dx = targetX - currentX;
-            const dy = targetY - currentY;
-            const distance = Math.hypot(dx, dy);
+                const dx = targetX - currentX;
+                const dy = targetY - currentY;
+                const distance = Math.hypot(dx, dy);
 
-            // Walking speed: ~65 pixels per second for a natural stroll
-            const speed = 65; 
-            const duration = Math.max(1.5, distance / speed);
+                // Slight individual speed variation (50px to 75px per second)
+                const speed = 50 + Math.random() * 25; 
+                const duration = Math.max(1.8, distance / speed);
 
-            const facing = dx >= 0 ? 1 : -1;
-            // Slight tilt toward the direction of diagonal movement (max 15deg)
-            const angle = Math.min(Math.max((dy / (Math.abs(dx) + 0.1)) * 12, -15), 15);
+                const facing = dx >= 0 ? 1 : -1;
+                // Subtle tilt along direction of diagonal movement
+                const angle = Math.min(Math.max((dy / (Math.abs(dx) + 0.1)) * 12, -15), 15);
 
-            cat.style.transition = `transform ${duration}s linear`;
-            cat.style.transform = `translate(${targetX}px, ${targetY}px) scaleX(${facing}) rotate(${facing * angle}deg)`;
+                cat.style.transition = `transform ${duration}s linear`;
+                cat.style.transform = `translate(${targetX}px, ${targetY}px) scaleX(${facing}) rotate(${facing * angle}deg)`;
 
-            currentX = targetX;
-            currentY = targetY;
+                currentX = targetX;
+                currentY = targetY;
 
-            setTimeout(roam, duration * 1000 + (Math.random() * 800));
-        }
+                setTimeout(roam, duration * 1000 + (Math.random() * 1200));
+            }
 
-        setTimeout(roam, 400);
+            // Stagger start times so they don't all move at the exact same moment
+            setTimeout(roam, 200 + index * 400);
+        });
     }
 
     initRovingCat();

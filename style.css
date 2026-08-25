@@ -473,7 +473,7 @@ body {
     object-fit: cover;
 }
 
-/* --- Roving Cat --- */
+/* --- Roving Cats --- */
 .roving-cat {
     position: fixed;
     top: 0;
@@ -484,10 +484,25 @@ body {
     will-change: transform;
 }
 
-.roving-cat img {
+.roving-cat.cat-1 img {
     height: 70px;
     width: auto;
     display: block;
+    filter: sepia(1) saturate(8) hue-rotate(345deg) brightness(1.15) contrast(1.1); /* Vibrant Orange / Ginger Cat 🐱 */
+}
+
+.roving-cat.cat-2 img {
+    height: 52px;
+    width: auto;
+    display: block;
+    filter: brightness(0.2) contrast(2.2) drop-shadow(0 0 6px rgba(255, 255, 255, 0.4)); /* Midnight Black Cat 🐈‍⬛ */
+}
+
+.roving-cat.cat-3 img {
+    height: 62px;
+    width: auto;
+    display: block;
+    filter: sepia(0.9) hue-rotate(280deg) saturate(5) brightness(1.2) drop-shadow(0 0 8px rgba(241, 91, 181, 0.5)); /* Cute Pink / Lilac Cat 🌸 */
 }
 
 /* --- Birthday Decorations --- */
@@ -624,7 +639,13 @@ body {
         width: 45px;
         height: 60px;
     }
-    .roving-cat img {
-        height: 55px;
+    .roving-cat.cat-1 img {
+        height: 52px;
+    }
+    .roving-cat.cat-2 img {
+        height: 40px;
+    }
+    .roving-cat.cat-3 img {
+        height: 46px;
     }
 }
