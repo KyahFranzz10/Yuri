@@ -475,27 +475,19 @@ body {
 
 /* --- Roving Cat --- */
 .roving-cat {
-    position: absolute;
-    bottom: 15px;
-    left: -150px;
+    position: fixed;
+    top: 0;
+    left: 0;
     z-index: 5; /* behind views but above background collage */
-    animation: roveCat 18s linear infinite;
     pointer-events: none;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+    will-change: transform;
 }
 
 .roving-cat img {
-    height: 75px;
+    height: 70px;
     width: auto;
     display: block;
-}
-
-@keyframes roveCat {
-    0% { transform: translateX(-150px) scaleX(1); }
-    49% { transform: translateX(calc(100vw + 150px)) scaleX(1); }
-    50% { transform: translateX(calc(100vw + 150px)) scaleX(-1); }
-    99% { transform: translateX(-150px) scaleX(-1); }
-    100% { transform: translateX(-150px) scaleX(1); }
 }
 
 /* --- Birthday Decorations --- */
