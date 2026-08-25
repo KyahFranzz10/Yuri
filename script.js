@@ -160,6 +160,20 @@ document.addEventListener('DOMContentLoaded', () => {
             blowOutCandle();
             return;
         }
+
+        // 3. Final -> Re-watch from Start
+        const rewatchBtn = e.target.closest('#rewatch-btn');
+        if (rewatchBtn) {
+            bgMusic.pause();
+            bgMusic.currentTime = 0;
+            const bgCollage = document.getElementById('global-bg-collage');
+            if (bgCollage) {
+                bgCollage.style.opacity = 0;
+                bgCollage.style.transform = 'scale(1.5)';
+            }
+            loadView('views/initial.html');
+            return;
+        }
     });
 
     function playTransitionEffect(callback) {
