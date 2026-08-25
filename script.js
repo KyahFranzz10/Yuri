@@ -171,26 +171,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
         flashImg.style.display = 'block';
         
-        const images = [
+        // Comprehensive list of her photos
+        const allPhotos = [
             "IMG_20240406_212807_497.jpg",
+            "IMG_20240406_212811_103.jpg",
+            "IMG_20240406_212812_502.jpg",
+            "IMG_20240406_212816_048.jpg",
             "IMG_20240409_113926_816.jpg",
+            "IMG_20240409_113932_378.jpg",
+            "IMG_20240409_113940_289.jpg",
+            "IMG_20240409_113943_002.jpg",
+            "IMG_20240409_113959_022.jpg",
             "IMG_20240410_003913_034.jpg",
+            "IMG_20240410_003914_317.jpg",
+            "IMG_20240410_003915_683.jpg",
+            "IMG_20240410_003917_015.jpg",
             "1714983792741.jpg",
-            "pic with me/20240404193551512.jpg"
+            "IMG_20240509_142755.jpg",
+            "received_439313421816813.jpeg",
+            "snaptik-app-7661088120498048276-slide-1.jpg",
+            "snaptik-app-7661088120498048276-slide-2.jpg"
         ];
+        
+        // Shuffle array so every transition shows a unique randomized order
+        const shuffled = [...allPhotos].sort(() => 0.5 - Math.random());
+        const totalFlashes = Math.min(15, shuffled.length);
         
         let flashCount = 0;
         const flashInterval = setInterval(() => {
-            flashImg.src = `assets/image/${images[flashCount % images.length]}`;
+            flashImg.src = `assets/image/${shuffled[flashCount]}`;
             flashImg.style.opacity = 1;
-            flashImg.style.transform = `translate(-50%, -50%) scale(${0.8 + (flashCount * 0.05)})`;
+            flashImg.style.transform = `translate(-50%, -50%) scale(${0.8 + (flashCount * 0.025)})`;
             
             setTimeout(() => {
-                if(flashCount <= 10) flashImg.style.opacity = 0;
-            }, 100);
+                if(flashCount < totalFlashes) flashImg.style.opacity = 0;
+            }, 90);
             
             flashCount++;
-            if (flashCount > 10) {
+            if (flashCount >= totalFlashes) {
                 clearInterval(flashInterval);
                 
                 flashImg.style.display = 'none';
@@ -204,9 +222,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 setTimeout(() => {
                     callback();
-                }, 4000);
+                }, 3500);
             }
-        }, 150);
+        }, 130);
     }
     
     function spawnEmojis(container) {
@@ -352,6 +370,8 @@ document.addEventListener('DOMContentLoaded', () => {
             "IMG_20240410_003914_317.jpg",
             "IMG_20240410_003915_683.jpg",
             "IMG_20240410_003917_015.jpg",
+            "1714983792741.jpg",
+            "IMG_20240509_142755.jpg",
             "snaptik-app-7661088120498048276-slide-1.jpg",
             "snaptik-app-7661088120498048276-slide-2.jpg",
             "received_439313421816813.jpeg"
