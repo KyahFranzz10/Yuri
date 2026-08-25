@@ -12,8 +12,17 @@
     padding: 0;
     box-sizing: border-box;
 }
+html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    overscroll-behavior: none;
+}
 
 body {
+    width: 100%;
+    max-width: 100vw;
+    overscroll-behavior: none;
     font-family: Arial, Helvetica, sans-serif;
     background-color: var(--bg-dark);
     background-image: 
@@ -52,6 +61,7 @@ body {
     pointer-events: none;
     transition: opacity 1s ease-in-out;
     padding: 20px;
+    overflow-x: hidden;
 }
 
 .view.active {
@@ -559,4 +569,43 @@ body {
     0% { transform: translateY(0) rotate(-5deg); }
     50% { transform: translateY(-60vh) rotate(5deg); }
     100% { transform: translateY(-120vh) rotate(-5deg); }
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 480px) {
+    .greeting {
+        font-size: 1.8rem;
+    }
+    .greeting .name {
+        font-size: 2.2rem;
+    }
+    .message-card h1 {
+        font-size: 1.8rem !important;
+    }
+    .celebration-header {
+        font-size: 1.5rem !important;
+    }
+    .message-card p {
+        font-size: 1rem !important;
+    }
+    .photo-grid {
+        grid-template-columns: 1fr;
+        max-height: 60vh;
+    }
+    .photo-grid img {
+        height: 200px;
+    }
+    .action-btn, .gift-btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+    .bunting li {
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-top: 30px solid var(--accent);
+    }
+    .balloon {
+        width: 45px;
+        height: 60px;
+    }
 }
