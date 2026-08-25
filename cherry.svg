@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="cherryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff2a6d" />
+      <stop offset="60%" stop-color="#d90429" />
+      <stop offset="100%" stop-color="#720026" />
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#74c69d" />
+      <stop offset="100%" stop-color="#2d6a4f" />
+    </linearGradient>
+  </defs>
+
+  <!-- Stems -->
+  <path d="M32 6 C 30 18, 20 28, 18 38" fill="none" stroke="#2d6a4f" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M32 6 C 36 20, 43 27, 46 38" fill="none" stroke="#2d6a4f" stroke-width="3.5" stroke-linecap="round"/>
+  
+  <!-- Leaf -->
+  <path d="M32 6 C 36 1, 48 2, 52 8 C 45 14, 36 11, 32 6 Z" fill="url(#leafGrad)"/>
+  
+  <!-- Left Cherry -->
+  <circle cx="18" cy="42" r="14" fill="url(#cherryGrad)"/>
+  <!-- Left Cherry Shine -->
+  <ellipse cx="14" cy="37" rx="3.5" ry="6" transform="rotate(-30 14 37)" fill="#ffffff" opacity="0.65"/>
+  <circle cx="12" cy="34" r="1.5" fill="#ffffff" opacity="0.9"/>
+  
+  <!-- Right Cherry -->
+  <circle cx="46" cy="44" r="14" fill="url(#cherryGrad)"/>
+  <!-- Right Cherry Shine -->
+  <ellipse cx="42" cy="39" rx="3.5" ry="6" transform="rotate(-30 42 39)" fill="#ffffff" opacity="0.65"/>
+  <circle cx="40" cy="36" r="1.5" fill="#ffffff" opacity="0.9"/>
+</svg>
